@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Almanac — Find, compare and understand today's AI</title>
+<meta name="description" content="A plain, practical guide to today's AI models: ranked by capability, matched to your job, and explained without hype.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="grain" aria-hidden="true"></div>
+
+<header class="site-header">
+  <div class="wrap header-row">
+    <a href="#top" class="brand">AI Almanac</a>
+    <nav class="site-nav" aria-label="Section navigation">
+      <a href="#finder">Find my AI</a>
+      <a href="#directory">Directory</a>
+      <a href="#audiences">By role</a>
+      <a href="#impact">Impact</a>
+      <a href="#jobs">Jobs</a>
+      <a href="#learning">Learning</a>
+      <a href="#security">Security</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+
+  <!-- ============ HERO ============ -->
+  <section class="hero">
+    <div class="wrap hero-grid">
+      <div class="hero-copy">
+        <p class="eyebrow">Updated August 2026 · plain-language, no hype</p>
+        <h1>There is no single "best AI." There is a best AI <em>for what you're doing.</em></h1>
+        <p class="lede">Eleven tools, thirteen capabilities, ranked and cross-referenced — so instead of reading another "top 10" list, you can filter straight to the one answer you need.</p>
+        <div class="hero-actions">
+          <a href="#finder" class="btn btn-primary">Find the right AI →</a>
+          <a href="#directory" class="btn btn-ghost">Browse the directory</a>
+        </div>
+      </div>
+      <div class="hero-panel" aria-hidden="true">
+        <div class="ledger-card">
+          <div class="ledger-head">
+            <span class="ledger-name">Sample reading</span>
+            <span class="ledger-tag">Coding</span>
+          </div>
+          <div class="ledger-rows">
+            <div class="ledger-row"><span>Claude</span><span class="meter" data-fill="5"></span></div>
+            <div class="ledger-row"><span>Copilot</span><span class="meter" data-fill="5"></span></div>
+            <div class="ledger-row"><span>ChatGPT</span><span class="meter" data-fill="4"></span></div>
+            <div class="ledger-row"><span>Gemini</span><span class="meter" data-fill="4"></span></div>
+            <div class="ledger-row"><span>Midjourney</span><span class="meter" data-fill="1"></span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FINDER TOOL ============ -->
+  <section class="finder" id="finder">
+    <div class="wrap">
+      <h2><span class="num">01</span> Find the best AI for your job</h2>
+      <p class="section-lede">Pick what you need help with and who you are — the top matches are ranked below.</p>
+
+      <form class="finder-form" id="finderForm">
+        <div class="field">
+          <label for="capabilitySelect">I need help with</label>
+          <select id="capabilitySelect"></select>
+        </div>
+        <div class="field">
+          <label for="audienceSelect">I am a</label>
+          <select id="audienceSelect"></select>
+        </div>
+        <button type="submit" class="btn btn-primary">Show my matches</button>
+      </form>
+
+      <div id="finderResults" class="finder-results" aria-live="polite"></div>
+    </div>
+  </section>
+
+  <!-- ============ DIRECTORY ============ -->
+  <section class="directory" id="directory">
+    <div class="wrap">
+      <h2><span class="num">02</span> The directory</h2>
+      <p class="section-lede">Every tool below is scored 1–5 across all thirteen capabilities. Click a card to open its full ledger.</p>
+      <div class="tool-grid" id="toolGrid"></div>
+    </div>
+  </section>
+
+  <!-- ============ BEST BY CATEGORY TABLE ============ -->
+  <section class="matrix" id="matrix">
+    <div class="wrap">
+      <h2><span class="num">03</span> Best AI, by category</h2>
+      <p class="section-lede">The single strongest pick for each capability, at a glance.</p>
+      <div class="matrix-table-wrap">
+        <table class="matrix-table" id="matrixTable">
+          <thead><tr><th>Capability</th><th>Top pick</th><th>Runner-up</th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ AUDIENCES ============ -->
+  <section class="audiences" id="audiences">
+    <div class="wrap">
+      <h2><span class="num">04</span> Best AI for school, college & work</h2>
+      <p class="section-lede">Three points each — the short version, not the sales pitch.</p>
+
+      <div class="audience-columns">
+        <div class="audience-col">
+          <h3>School students</h3>
+          <ul class="tick-list">
+            <li>Start with <strong>Gemini</strong> or <strong>ChatGPT</strong> free tiers — safe defaults with content guardrails.</li>
+            <li>Use AI to check understanding and get explained examples, not to write finished homework.</li>
+            <li>Ask "explain this three ways" instead of "give me the answer" to actually learn the material.</li>
+          </ul>
+        </div>
+        <div class="audience-col">
+          <h3>College students</h3>
+          <ul class="tick-list">
+            <li><strong>Claude</strong> or <strong>ChatGPT</strong> for essays, problem sets and study guides; <strong>Perplexity</strong> for sourced research.</li>
+            <li><strong>GitHub Copilot</strong> or <strong>Claude</strong> for CS coursework and side projects.</li>
+            <li>Check your institution's AI-use policy before submitting anything AI-assisted.</li>
+          </ul>
+        </div>
+        <div class="audience-col">
+          <h3>Working professionals</h3>
+          <ul class="tick-list">
+            <li>Developers: an in-editor tool (<strong>Copilot</strong>) plus a strong generalist (<strong>Claude</strong>) for design decisions.</li>
+            <li>Designers & video: a dedicated model (<strong>Midjourney</strong>, <strong>Veo</strong>, <strong>Runway</strong>) — generalists aren't built for this.</li>
+            <li>Business, marketing & research: a fast generalist (<strong>ChatGPT</strong>, <strong>Gemini</strong>) wired into your existing tools.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ IMPACT ============ -->
+  <section class="impact" id="impact">
+    <div class="wrap">
+      <h2><span class="num">05</span> How AI is affecting human life</h2>
+      <div class="two-col">
+        <div>
+          <h3>Now</h3>
+          <ul class="tick-list" id="impactNow"></ul>
+        </div>
+        <div>
+          <h3>Where it's heading</h3>
+          <ul class="tick-list" id="impactFuture"></ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ JOBS ============ -->
+  <section class="jobs" id="jobs">
+    <div class="wrap">
+      <h2><span class="num">06</span> Jobs & AI</h2>
+      <p class="section-lede">What's already changing, what's next, and what's likely to stay human.</p>
+      <div class="jobs-columns">
+        <div class="jobs-col jobs-now">
+          <h3>Being replaced now</h3>
+          <ul class="tick-list" id="jobsNow"></ul>
+        </div>
+        <div class="jobs-col jobs-future">
+          <h3>Likely within a few years</h3>
+          <ul class="tick-list" id="jobsFuture"></ul>
+        </div>
+        <div class="jobs-col jobs-safe">
+          <h3>Unlikely to be replaced</h3>
+          <ul class="tick-list" id="jobsSafe"></ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ LEARNING ============ -->
+  <section class="learning" id="learning">
+    <div class="wrap">
+      <h2><span class="num">07</span> Learning AI, and learning <em>with</em> it</h2>
+      <div class="two-col">
+        <div>
+          <h3>What it already helps with</h3>
+          <ul class="tick-list" id="learningNow"></ul>
+        </div>
+        <div>
+          <h3>Where it's heading</h3>
+          <ul class="tick-list" id="learningFuture"></ul>
+        </div>
+      </div>
+      <h3 class="use-well-heading">How to use AI effectively</h3>
+      <ul class="tick-list use-well" id="useWell"></ul>
+    </div>
+  </section>
+
+  <!-- ============ SECURITY ============ -->
+  <section class="security" id="security">
+    <div class="wrap security-grid">
+      <div>
+        <h2><span class="num">08</span> Security & how this site is built</h2>
+        <ul class="tick-list">
+          <li>This is a static site — plain HTML, CSS and JavaScript with no server, no database and no login. There's no account data to leak because none is collected.</li>
+          <li>All content and ratings live in one readable file (<code>data.js</code>) — nothing is hidden, fetched from a third party, or executed remotely.</li>
+          <li>No cookies, no analytics, no forms sending data anywhere. What happens in your browser stays in your browser.</li>
+        </ul>
+      </div>
+      <div class="deploy-card">
+        <h3>To publish this live</h3>
+        <ol>
+          <li>Keep <code>index.html</code>, <code>style.css</code>, <code>data.js</code> and <code>script.js</code> in one folder.</li>
+          <li>Push that folder to a GitHub repository.</li>
+          <li>Turn on <strong>GitHub Pages</strong> (or drag the folder into <strong>Netlify</strong> or <strong>Vercel</strong>) for a free, HTTPS-secured live URL.</li>
+          <li>To edit later: change the text in <code>data.js</code> and re-deploy — no rebuild step needed.</li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="site-footer">
+  <div class="wrap footer-row">
+    <p>AI Almanac — an independent, informational guide. Ratings are informed estimates, not lab benchmarks, and this field moves monthly — recheck before high-stakes decisions.</p>
+    <p class="footer-meta">Built as a static site · no tracking · last content pass August 2026</p>
+  </div>
+</footer>
+
+<script src="data.js"></script>
+<script src="script.js"></script>
+</body>
+</html>

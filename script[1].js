@@ -1,0 +1,162 @@
+/* ============================================================
+   AI ALMANAC — BEHAVIOR
+   Renders everything from data.js. No network calls, no storage.
+   ============================================================ */
+
+(function () {
+  "use strict";
+
+  // ---------- helpers ----------
+  function el(tag, cls, html) {
+    const e = document.createElement(tag);
+    if (cls) e.className = cls;
+    if (html !== undefined) e.innerHTML = html;
+    return e;
+  }
+
+  function ticks(rating) {
+    let out = '<span class="meter-ticks">';
+    for (let i = 1; i <= 5; i++) {
+      out += `<span class="tick${i <= rating ? " on" : ""}"></span>`;
+    }
+    out += "</span>";
+    return out;
+  }
+
+  function catLabel(id) {
+    const c = CATEGORIES.find((c) => c.id === id);
+    return c ? c.label : id;
+  }
+
+  // ---------- 1. populate finder selects ----------
+  const capSelect = document.getElementById("capabilitySelect");
+  const audSelect = document.getElementById("audienceSelect");
+
+  CATEGORIES.forEach((c) => {
+    capSelect.appendChild(el("option", null, c.label)).value = c.id;
+  });
+  const anyAud = el("option", null, "Anyone (skip this)");
+  anyAud.value = "";
+  audSelect.appendChild(anyAud);
+  AUDIENCES.forEach((a) => {
+    audSelect.appendChild(el("option", null, a.label)).value = a.id;
+  });
+
+  // ---------- 2. finder logic ----------
+  const finderForm = document.getElementById("finderForm");
+  const finderResults = document.getElementById("finderResults");
+
+  function runFinder(catId, audId) {
+    const scored = TOOLS.map((t) => {
+      const base = t.ratings[catId] || 1;
+      const audMatch = audId && t.audiences.includes(audId);
+      return { tool: t, score: base * 10 + (audMatch ? 3 : 0), base, audMatch };
+    }).sort((a, b) => b.score - a.score);
+
+    const top = scored.slice(0, 3);
+    finderResults.innerHTML = "";
+
+    if (top[0].base <= 1) {
+      finderResults.appendChild(
+        el("p", "finder-empty", `No tool in this directory is built for “${catLabel(catId)}.” Try a different capability.`)
+      );
+      return;
+    }
+
+    top.forEach((entry, i) => {
+      const card = el("div", "match-card");
+      card.appendChild(el("div", "match-rank", String(i + 1)));
+      const mid = el("div", null,
+        `<div class="match-name">${entry.tool.name} <span style="color:var(--ink-soft); font-weight:400;">— ${entry.tool.maker}</span></div>
+         <p class="match-reason">${entry.tool.blurb}${entry.audMatch ? ` Commonly used by people in your role.` : ""}</p>`
+      );
+      card.appendChild(mid);
+      card.appendChild(el("div", "match-score", `${catLabel(catId)}: ${entry.base}/5`));
+      finderResults.appendChild(card);
+    });
+
+    if (audId) {
+      finderResults.appendChild(el("p", "finder-empty", AUDIENCE_NOTES[audId] || ""));
+    }
+  }
+
+  finderForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    runFinder(capSelect.value, audSelect.value);
+  });
+
+  // show an initial result on load (Thinking / Anyone)
+  runFinder(CATEGORIES[0].id, "");
+
+  // ---------- 3. directory grid ----------
+  const toolGrid = document.getElementById("toolGrid");
+
+  TOOLS.forEach((t) => {
+    const card = el("div", "tool-card");
+    card.setAttribute("tabindex", "0");
+    card.setAttribute("role", "button");
+    card.setAttribute("aria-expanded", "false");
+
+    const ledgerRows = CATEGORIES.map(
+      (c) => `<div class="tool-ledger-row"><span class="cat">${c.label}</span>${ticks(t.ratings[c.id])}</div>`
+    ).join("");
+
+    card.innerHTML = `
+      <div class="tool-card-head">
+        <span class="tool-name">${t.name}</span>
+        <span class="tool-tier">${t.tier}</span>
+      </div>
+      <div class="tool-maker">${t.maker}</div>
+      <p class="tool-blurb">${t.blurb}</p>
+      <span class="tool-toggle">+ show full ledger</span>
+      <div class="tool-ledger">${ledgerRows}
+        <a class="tool-link" href="${t.link}" target="_blank" rel="noopener">Visit official site →</a>
+      </div>
+    `;
+
+    function toggle() {
+      const open = card.classList.toggle("open");
+      card.setAttribute("aria-expanded", String(open));
+      card.querySelector(".tool-toggle").textContent = open ? "− hide ledger" : "+ show full ledger";
+    }
+    card.addEventListener("click", (e) => {
+      if (e.target.closest(".tool-link")) return; // let the link work normally
+      toggle();
+    });
+    card.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); toggle(); }
+    });
+
+    toolGrid.appendChild(card);
+  });
+
+  // ---------- 4. best-by-category matrix ----------
+  const matrixBody = document.querySelector("#matrixTable tbody");
+
+  CATEGORIES.forEach((c) => {
+    const ranked = [...TOOLS].sort((a, b) => b.ratings[c.id] - a.ratings[c.id]);
+    const [first, second] = ranked;
+    const row = el("tr", null,
+      `<td>${c.label}</td>
+       <td class="pick-primary">${first.name} <span style="color:var(--ink-soft); font-weight:400;">(${first.ratings[c.id]}/5)</span></td>
+       <td>${second.name} <span style="color:var(--ink-soft);">(${second.ratings[c.id]}/5)</span></td>`
+    );
+    matrixBody.appendChild(row);
+  });
+
+  // ---------- 5. static content lists from data.js ----------
+  function fillList(id, items) {
+    const list = document.getElementById(id);
+    if (!list) return;
+    items.forEach((text) => list.appendChild(el("li", null, text)));
+  }
+
+  fillList("impactNow", IMPACT_NOW);
+  fillList("impactFuture", IMPACT_FUTURE);
+  fillList("jobsNow", JOBS_REPLACING_NOW);
+  fillList("jobsFuture", JOBS_REPLACING_FUTURE);
+  fillList("jobsSafe", JOBS_SAFE);
+  fillList("learningNow", LEARNING_NOW);
+  fillList("learningFuture", LEARNING_FUTURE);
+  fillList("useWell", USE_EFFECTIVELY);
+})();
