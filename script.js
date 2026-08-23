@@ -88,6 +88,59 @@
   // show an initial result on load (Thinking / Anyone)
   runFinder(CATEGORIES[0].id, "");
 
+  // ---------- 2b. prompt builder ----------
+  const promptRole = document.getElementById("promptRole");
+  const promptOutcome = document.getElementById("promptOutcome");
+  const promptForm = document.getElementById("promptForm");
+  const promptOutput = document.getElementById("promptOutput");
+  const promptTextEl = document.getElementById("promptText");
+  const copyPromptBtn = document.getElementById("copyPromptBtn");
+
+  PROMPT_ROLES.forEach((r) => {
+    promptRole.appendChild(el("option", null, r)).value = r;
+  });
+  OUTCOME_FORMATS.forEach((o) => {
+    promptOutcome.appendChild(el("option", null, o.label)).value = o.id;
+  });
+
+  const OUTCOME_PHRASES = {
+    bullets: "Present the answer as clear, short bullet points.",
+    short: "Present the answer as a short paragraph.",
+    long: "Present the answer as a long, detailed paragraph, covering the topic thoroughly.",
+    steps: "Present the answer as a numbered, step-by-step guide.",
+    table: "Present the answer as a table.",
+  };
+
+  promptForm.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const role = promptRole.value;
+    const task = document.getElementById("promptTask").value.trim();
+    const outcomeId = promptOutcome.value;
+    const wordLimit = document.getElementById("promptWordLimit").value;
+
+    if (!task) {
+      promptOutput.style.display = "block";
+      promptTextEl.textContent = "Describe what you want the AI to do first — even a line or two is enough.";
+      return;
+    }
+
+    let prompt = `Act as a ${role}.\n\n${task}\n\n${OUTCOME_PHRASES[outcomeId]}`;
+    if (wordLimit) {
+      prompt += ` Keep it to about ${wordLimit} words.`;
+    }
+
+    promptTextEl.textContent = prompt;
+    promptOutput.style.display = "block";
+    promptOutput.scrollIntoView({ behavior: "smooth", block: "nearest" });
+  });
+
+  copyPromptBtn.addEventListener("click", () => {
+    navigator.clipboard.writeText(promptTextEl.textContent).then(() => {
+      copyPromptBtn.textContent = "Copied!";
+      setTimeout(() => { copyPromptBtn.textContent = "Copy"; }, 1500);
+    });
+  });
+
   // ---------- 3. directory grid ----------
   const toolGrid = document.getElementById("toolGrid");
 
@@ -159,4 +212,55 @@
   fillList("learningNow", LEARNING_NOW);
   fillList("learningFuture", LEARNING_FUTURE);
   fillList("useWell", USE_EFFECTIVELY);
+})();
+
+/* ---------- Prompt builder (appended module) ---------- */
+(function () {
+  "use strict";
+  const roleSelect = document.getElementById("actAsSelect");
+  const outcomeSelect = document.getElementById("outcomeSelect");
+  if (!roleSelect || !outcomeSelect) return; // section not on the page yet
+
+  PROMPT_ROLES.forEach((r) => {
+    const opt = document.createElement("option");
+    opt.value = r; opt.textContent = r;
+    roleSelect.appendChild(opt);
+  });
+  OUTCOME_FORMATS.forEach((f) => {
+    const opt = document.createElement("option");
+    opt.value = f.label; opt.textContent = f.label;
+    outcomeSelect.appendChild(opt);
+  });
+
+  const form = document.getElementById("promptForm");
+  const output = document.getElementById("promptOutput");
+  const promptText = document.getElementById("promptText");
+  const copyBtn = document.getElementById("copyPromptBtn");
+  const taskInput = document.getElementById("taskInput");
+  const wordLimitInput = document.getElementById("wordLimitInput");
+
+  form.addEventListener("submit", (e) => {
+    e.preventDefault();
+    const role = roleSelect.value;
+    const task = taskInput.value.trim();
+    const outcome = outcomeSelect.value;
+    const wordLimit = wordLimitInput.value.trim();
+
+    if (!task) {
+      promptText.textContent = "Please describe what you want the AI to do first.";
+      output.style.display = "block";
+      return;
+    }
+
+    const prompt = `Act as a(n) ${role}.\n\n${task}\n\nPlease respond in ${outcome.toLowerCase()}${wordLimit ? `, within about ${wordLimit} words.` : "."}`;
+    promptText.textContent = prompt;
+    output.style.display = "block";
+  });
+
+  copyBtn.addEventListener("click", () => {
+    navigator.clipboard.writeText(promptText.textContent).then(() => {
+      copyBtn.textContent = "Copied!";
+      setTimeout(() => { copyBtn.textContent = "Copy"; }, 1500);
+    });
+  });
 })();
