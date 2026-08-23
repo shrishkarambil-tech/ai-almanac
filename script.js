@@ -265,55 +265,40 @@
   applyTilt(".ledger-card", 5, 3);
   applyTilt(".match-card", 4, 3);
   applyTilt(".audience-col, .jobs-col", 4, 3);
-})();
 
-/* ---------- Prompt builder (appended module) ---------- */
-(function () {
-  "use strict";
-  const roleSelect = document.getElementById("actAsSelect");
-  const outcomeSelect = document.getElementById("outcomeSelect");
-  if (!roleSelect || !outcomeSelect) return; // section not on the page yet
+  // ---------- 7. feedback star rating + mailto ----------
+  const feedbackForm = document.getElementById("feedbackForm");
+  const starButtons = document.querySelectorAll(".star");
+  const starReadout = document.getElementById("starReadout");
+  let selectedRating = 0;
 
-  PROMPT_ROLES.forEach((r) => {
-    const opt = document.createElement("option");
-    opt.value = r; opt.textContent = r;
-    roleSelect.appendChild(opt);
-  });
-  OUTCOME_FORMATS.forEach((f) => {
-    const opt = document.createElement("option");
-    opt.value = f.label; opt.textContent = f.label;
-    outcomeSelect.appendChild(opt);
-  });
-
-  const form = document.getElementById("promptForm");
-  const output = document.getElementById("promptOutput");
-  const promptText = document.getElementById("promptText");
-  const copyBtn = document.getElementById("copyPromptBtn");
-  const taskInput = document.getElementById("taskInput");
-  const wordLimitInput = document.getElementById("wordLimitInput");
-
-  form.addEventListener("submit", (e) => {
-    e.preventDefault();
-    const role = roleSelect.value;
-    const task = taskInput.value.trim();
-    const outcome = outcomeSelect.value;
-    const wordLimit = wordLimitInput.value.trim();
-
-    if (!task) {
-      promptText.textContent = "Please describe what you want the AI to do first.";
-      output.style.display = "block";
-      return;
-    }
-
-    const prompt = `Act as a(n) ${role}.\n\n${task}\n\nPlease respond in ${outcome.toLowerCase()}${wordLimit ? `, within about ${wordLimit} words.` : "."}`;
-    promptText.textContent = prompt;
-    output.style.display = "block";
-  });
-
-  copyBtn.addEventListener("click", () => {
-    navigator.clipboard.writeText(promptText.textContent).then(() => {
-      copyBtn.textContent = "Copied!";
-      setTimeout(() => { copyBtn.textContent = "Copy"; }, 1500);
+  function paintStars(value) {
+    starButtons.forEach((btn) => {
+      btn.classList.toggle("filled", Number(btn.dataset.value) <= value);
     });
+  }
+
+  starButtons.forEach((btn) => {
+    btn.addEventListener("click", () => {
+      selectedRating = Number(btn.dataset.value);
+      paintStars(selectedRating);
+      starReadout.textContent = `${selectedRating}/5`;
+    });
+    btn.addEventListener("mouseenter", () => paintStars(Number(btn.dataset.value)));
+    btn.addEventListener("mouseleave", () => paintStars(selectedRating));
   });
+
+  if (feedbackForm) {
+    feedbackForm.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const comment = document.getElementById("feedbackComment").value.trim();
+      const ratingText = selectedRating ? `${selectedRating}/5` : "Not rated";
+
+      const subject = encodeURIComponent(`AI Almanac feedback — ${ratingText}`);
+      const body = encodeURIComponent(
+        `Rating: ${ratingText}\n\nComments:\n${comment || "(no comments left)"}`
+      );
+      window.location.href = `mailto:Shrishkarambil@gmail.com?subject=${subject}&body=${body}`;
+    });
+  }
 })();
