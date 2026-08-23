@@ -91,10 +91,10 @@ section { padding: 76px 0; border-top: 1px solid var(--line); }
   backdrop-filter: blur(6px);
   border-bottom: 1px solid var(--line);
 }
-.header-row { display: flex; align-items: center; justify-content: space-between; height: 64px; }
+.header-row { display: flex; align-items: center; justify-content: space-between; height: 72px; }
 .brand {
-  font-family: var(--font-display); font-weight: 600; font-size: 1.2rem;
-  color: var(--ink); text-decoration: none; letter-spacing: -.01em;
+  font-family: var(--font-display); font-weight: 700; font-size: 1.6rem;
+  color: var(--ink); text-decoration: none; letter-spacing: -.01em; display: flex; align-items: center; gap: 10px; 
 }
 .site-nav { display: flex; gap: 22px; flex-wrap: wrap; }
 .site-nav a {
