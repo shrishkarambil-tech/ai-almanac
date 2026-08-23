@@ -277,6 +277,18 @@ input[type="number"] {
 .use-well-heading { margin-top: 40px; }
 .use-well { display: grid; grid-template-columns: 1fr 1fr; gap: 10px 30px; margin-top: 18px; }
 
+/* ---------- feedback / star rating ---------- */
+.stars { display: flex; align-items: center; gap: 6px; margin-top: 4px; }
+.star {
+  background: none; border: none; cursor: pointer; padding: 0;
+  font-size: 1.9rem; line-height: 1; color: var(--line);
+  transition: color .15s ease, transform .15s ease;
+}
+.star:hover, .star.hovered { transform: scale(1.15); }
+.star.filled { color: #C9A24B; }
+.star-readout { font-family: var(--font-mono); font-size: .8rem; color: var(--ink-soft); margin-left: 8px; }
+.feedback-note { font-size: .82rem; color: var(--ink-soft); margin: 10px 0 0; }
+
 /* ---------- security ---------- */
 .security-grid { display: grid; grid-template-columns: 1.1fr .9fr; gap: 48px; }
 .deploy-card { background: var(--bg-alt); border: 1px solid var(--line); border-radius: var(--radius); padding: 24px; box-shadow: var(--shadow-md); }
