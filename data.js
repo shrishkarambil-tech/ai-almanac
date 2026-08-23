@@ -41,11 +41,15 @@ const AUDIENCES = [
 
 // ---- "Make your prompt" tool: role list and outcome formats ----
 const PROMPT_ROLES = [
+  "School student", "College student",
   "Editor", "Teacher", "Career coach", "Business consultant", "Developer",
   "Doctor (general explainer)", "Lawyer (general explainer)", "Financial advisor",
   "Fitness trainer", "Chef", "Marketer", "Social media manager", "Researcher",
   "Customer support agent", "HR manager", "Product manager", "UX designer",
   "Travel planner", "Tutor", "Resume writer", "Data analyst",
+  "Content writer", "Interview coach", "Life coach", "Journalist",
+  "Entrepreneur", "Public speaking coach", "Mentor", "Parent",
+  "Other",
 ];
 
 const OUTCOME_FORMATS = [
@@ -54,6 +58,12 @@ const OUTCOME_FORMATS = [
   { id: "long", label: "Long, detailed paragraph" },
   { id: "steps", label: "Step-by-step guide" },
   { id: "table", label: "Table" },
+  { id: "essay", label: "Essay format" },
+  { id: "qna", label: "Q&A format" },
+  { id: "email", label: "Email format" },
+  { id: "comparison", label: "Comparison (pros & cons)" },
+  { id: "script", label: "Script / dialogue format" },
+  { id: "other", label: "Other" },
 ];
 
 // ---- The tools themselves. Ratings are 1-5, informed estimates as of Aug 2026. ----
