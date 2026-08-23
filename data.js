@@ -39,6 +39,23 @@ const AUDIENCES = [
   { id: "teacher",     label: "Teacher / educator" },
 ];
 
+// ---- "Make your prompt" tool: role list and outcome formats ----
+const PROMPT_ROLES = [
+  "Editor", "Teacher", "Career coach", "Business consultant", "Developer",
+  "Doctor (general explainer)", "Lawyer (general explainer)", "Financial advisor",
+  "Fitness trainer", "Chef", "Marketer", "Social media manager", "Researcher",
+  "Customer support agent", "HR manager", "Product manager", "UX designer",
+  "Travel planner", "Tutor", "Resume writer", "Data analyst",
+];
+
+const OUTCOME_FORMATS = [
+  { id: "bullets", label: "In pointers / bullet points" },
+  { id: "short", label: "Short paragraph" },
+  { id: "long", label: "Long, detailed paragraph" },
+  { id: "steps", label: "Step-by-step guide" },
+  { id: "table", label: "Table" },
+];
+
 // ---- The tools themselves. Ratings are 1-5, informed estimates as of Aug 2026. ----
 const TOOLS = [
   {
@@ -195,3 +212,4 @@ const USE_EFFECTIVELY = [
   "Learn one tool deeply before collecting five shallowly.",
   "Treat it as a collaborator you supervise, not an authority you defer to.",
 ];
+
