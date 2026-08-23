@@ -266,7 +266,7 @@
   applyTilt(".match-card", 4, 3);
   applyTilt(".audience-col, .jobs-col", 4, 3);
 
-  // ---------- 7. feedback star rating + mailto ----------
+  // ---------- 7. feedback star rating + Formspree submission ----------
   const feedbackForm = document.getElementById("feedbackForm");
   const starButtons = document.querySelectorAll(".star");
   const starReadout = document.getElementById("starReadout");
@@ -289,16 +289,50 @@
   });
 
   if (feedbackForm) {
+    const submitBtn = document.getElementById("feedbackSubmitBtn");
+    const statusNote = document.getElementById("feedbackStatusNote");
+    const defaultStatusText = statusNote.textContent;
+    const FORMSPREE_ENDPOINT = "https://formspree.io/f/xzepqjjl";
+
     feedbackForm.addEventListener("submit", (e) => {
       e.preventDefault();
       const comment = document.getElementById("feedbackComment").value.trim();
       const ratingText = selectedRating ? `${selectedRating}/5` : "Not rated";
 
-      const subject = encodeURIComponent(`AI Almanac feedback — ${ratingText}`);
-      const body = encodeURIComponent(
-        `Rating: ${ratingText}\n\nComments:\n${comment || "(no comments left)"}`
-      );
-      window.location.href = `mailto:Shrishkarambil@gmail.com?subject=${subject}&body=${body}`;
+      submitBtn.disabled = true;
+      submitBtn.textContent = "Sending...";
+
+      fetch(FORMSPREE_ENDPOINT, {
+        method: "POST",
+        headers: { "Accept": "application/json", "Content-Type": "application/json" },
+        body: JSON.stringify({
+          rating: ratingText,
+          comments: comment || "(no comments left)",
+          _subject: `AI Almanac feedback — ${ratingText}`,
+        }),
+      })
+        .then((res) => {
+          if (res.ok) {
+            submitBtn.textContent = "Sent ✓";
+            statusNote.textContent = "Thanks — your feedback was sent.";
+            document.getElementById("feedbackComment").value = "";
+            selectedRating = 0;
+            paintStars(0);
+            starReadout.textContent = "Not rated yet";
+            setTimeout(() => {
+              submitBtn.disabled = false;
+              submitBtn.textContent = "Send feedback";
+              statusNote.textContent = defaultStatusText;
+            }, 3000);
+          } else {
+            throw new Error("Submission failed");
+          }
+        })
+        .catch(() => {
+          submitBtn.disabled = false;
+          submitBtn.textContent = "Send feedback";
+          statusNote.textContent = "Something went wrong sending that — please try again in a moment.";
+        });
     });
   }
 })();
