@@ -28,6 +28,7 @@
       <a href="#jobs">Jobs</a>
       <a href="#learning">Learning</a>
       <a href="#security">Security</a>
+      <a href="#feedback">Feedback</a>
     </nav>
   </div>
 </header>
@@ -252,7 +253,7 @@
         <ul class="tick-list">
           <li>This is a static site — plain HTML, CSS and JavaScript with no server, no database and no login. There's no account data to leak because none is collected.</li>
           <li>All content and ratings live in one readable file (<code>data.js</code>) — nothing is hidden, fetched from a third party, or executed remotely.</li>
-          <li>No cookies, no analytics, no forms sending data anywhere. What happens in your browser stays in your browser.</li>
+          <li>No cookies, no analytics. The one form on this site (Feedback) opens your own email app to send a message directly to me — it doesn't transmit anything through this site or any server.</li>
         </ul>
       </div>
       <div class="deploy-card">
@@ -264,6 +265,36 @@
           <li>To edit later: change the text in <code>data.js</code> and re-deploy — no rebuild step needed.</li>
         </ol>
       </div>
+    </div>
+  </section>
+
+  <!-- ============ FEEDBACK ============ -->
+  <section class="feedback" id="feedback">
+    <div class="wrap">
+      <h2><span class="num">10</span> Feedback</h2>
+      <p class="section-lede">Rate the site and tell me what worked, what didn't, or what you'd add — it opens a pre-filled email straight to me.</p>
+
+      <form class="promptbuilder-form" id="feedbackForm">
+        <div class="field">
+          <label>Rate this website</label>
+          <div class="stars" id="feedbackStars" role="radiogroup" aria-label="Rate this website out of 5">
+            <button type="button" class="star" data-value="1" aria-label="1 star">★</button>
+            <button type="button" class="star" data-value="2" aria-label="2 stars">★</button>
+            <button type="button" class="star" data-value="3" aria-label="3 stars">★</button>
+            <button type="button" class="star" data-value="4" aria-label="4 stars">★</button>
+            <button type="button" class="star" data-value="5" aria-label="5 stars">★</button>
+            <span class="star-readout" id="starReadout">Not rated yet</span>
+          </div>
+        </div>
+
+        <div class="field">
+          <label for="feedbackComment">Your feedback (optional)</label>
+          <textarea id="feedbackComment" rows="4" placeholder="What worked, what didn't, what you'd add..."></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Send feedback</button>
+        <p class="feedback-note">This opens your email app with your rating and comments pre-filled, addressed directly to me. Nothing is collected or stored by this site.</p>
+      </form>
     </div>
   </section>
 
