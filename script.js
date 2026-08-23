@@ -103,17 +103,35 @@
     promptOutcome.appendChild(el("option", null, o.label)).value = o.id;
   });
 
+  const promptRoleOther = document.getElementById("promptRoleOther");
+  const promptOutcomeOther = document.getElementById("promptOutcomeOther");
+
+  promptRole.addEventListener("change", () => {
+    promptRoleOther.style.display = promptRole.value === "Other" ? "block" : "none";
+  });
+  promptOutcome.addEventListener("change", () => {
+    promptOutcomeOther.style.display = promptOutcome.value === "other" ? "block" : "none";
+  });
+
   const OUTCOME_PHRASES = {
     bullets: "Present the answer as clear, short bullet points.",
     short: "Present the answer as a short paragraph.",
     long: "Present the answer as a long, detailed paragraph, covering the topic thoroughly.",
     steps: "Present the answer as a numbered, step-by-step guide.",
     table: "Present the answer as a table.",
+    essay: "Present the answer as a structured essay, with an introduction, body and conclusion.",
+    qna: "Present the answer in a question-and-answer format.",
+    email: "Present the answer as a ready-to-send email.",
+    comparison: "Present the answer as a pros-and-cons comparison.",
+    script: "Present the answer as a script or dialogue.",
   };
 
   promptForm.addEventListener("submit", (e) => {
     e.preventDefault();
-    const role = promptRole.value;
+    let role = promptRole.value;
+    if (role === "Other") {
+      role = promptRoleOther.value.trim() || "the role I specify";
+    }
     const task = document.getElementById("promptTask").value.trim();
     const outcomeId = promptOutcome.value;
     const wordLimit = document.getElementById("promptWordLimit").value;
@@ -124,7 +142,15 @@
       return;
     }
 
-    let prompt = `Act as a ${role}.\n\n${task}\n\n${OUTCOME_PHRASES[outcomeId]}`;
+    let outcomePhrase;
+    if (outcomeId === "other") {
+      const custom = promptOutcomeOther.value.trim();
+      outcomePhrase = custom ? `Present the answer as: ${custom}.` : "Present the answer in whatever format best fits.";
+    } else {
+      outcomePhrase = OUTCOME_PHRASES[outcomeId];
+    }
+
+    let prompt = `Act as a ${role}.\n\n${task}\n\n${outcomePhrase}`;
     if (wordLimit) {
       prompt += ` Keep it to about ${wordLimit} words.`;
     }
