@@ -238,6 +238,33 @@
   fillList("learningNow", LEARNING_NOW);
   fillList("learningFuture", LEARNING_FUTURE);
   fillList("useWell", USE_EFFECTIVELY);
+
+  // ---------- 6. cursor-tilt depth effect ----------
+  const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const supportsHoverTilt = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+
+  function applyTilt(selector, maxTilt, lift) {
+    if (prefersReducedMotion || !supportsHoverTilt) return;
+    document.querySelectorAll(selector).forEach((el) => {
+      el.style.transformStyle = "preserve-3d";
+      el.addEventListener("mousemove", (e) => {
+        const rect = el.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        const rotateY = ((x - rect.width / 2) / (rect.width / 2)) * maxTilt;
+        const rotateX = -((y - rect.height / 2) / (rect.height / 2)) * maxTilt;
+        el.style.transform = `perspective(900px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-${lift}px)`;
+      });
+      el.addEventListener("mouseleave", () => {
+        el.style.transform = "";
+      });
+    });
+  }
+
+  applyTilt(".tool-card", 6, 4);
+  applyTilt(".ledger-card", 5, 3);
+  applyTilt(".match-card", 4, 3);
+  applyTilt(".audience-col, .jobs-col", 4, 3);
 })();
 
 /* ---------- Prompt builder (appended module) ---------- */
