@@ -253,7 +253,7 @@
         <ul class="tick-list">
           <li>This is a static site — plain HTML, CSS and JavaScript with no server, no database and no login. There's no account data to leak because none is collected.</li>
           <li>All content and ratings live in one readable file (<code>data.js</code>) — nothing is hidden, fetched from a third party, or executed remotely.</li>
-          <li>No cookies, no analytics. The one form on this site (Feedback) opens your own email app to send a message directly to me — it doesn't transmit anything through this site or any server.</li>
+          <li>No cookies, no analytics, no tracking. The one exception is the Feedback form at the bottom — it sends your rating and comments through Formspree (a third-party form service) directly to my inbox. Nothing else on this site sends data anywhere.</li>
         </ul>
       </div>
       <div class="deploy-card">
@@ -272,7 +272,7 @@
   <section class="feedback" id="feedback">
     <div class="wrap">
       <h2><span class="num">10</span> Feedback</h2>
-      <p class="section-lede">Rate the site and tell me what worked, what didn't, or what you'd add — it opens a pre-filled email straight to me.</p>
+      <p class="section-lede">Rate the site and tell me what worked, what didn't, or what you'd add — this sends it straight to my inbox.</p>
 
       <form class="promptbuilder-form" id="feedbackForm">
         <div class="field">
@@ -292,8 +292,8 @@
           <textarea id="feedbackComment" rows="4" placeholder="What worked, what didn't, what you'd add..."></textarea>
         </div>
 
-        <button type="submit" class="btn btn-primary">Send feedback</button>
-        <p class="feedback-note">This opens your email app with your rating and comments pre-filled, addressed directly to me. Nothing is collected or stored by this site.</p>
+        <button type="submit" class="btn btn-primary" id="feedbackSubmitBtn">Send feedback</button>
+        <p class="feedback-note" id="feedbackStatusNote">Sent directly to my inbox — this is the one thing on this site that goes through a third-party form service (Formspree) rather than staying entirely in your browser.</p>
       </form>
     </div>
   </section>
