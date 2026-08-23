@@ -99,7 +99,8 @@ section { padding: 76px 0; border-top: 1px solid var(--line); }
   backdrop-filter: blur(6px);
   border-bottom: 1px solid var(--line);
 }
-.header-row { display: flex; align-items: center; justify-content: space-between; height: 64px; }
+.site-header .wrap { max-width: 100%; padding-left: 36px; padding-right: 36px; }
+.header-row { display: flex; align-items: center; justify-content: space-between; height: 72px; }
 .brand {
   font-family: var(--font-display); font-weight: 700; font-size: 1.7rem;
   color: var(--ink); text-decoration: none; letter-spacing: -.01em;
